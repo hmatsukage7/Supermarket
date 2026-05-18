@@ -127,10 +127,36 @@ ORDER BY month
 ```
 `Which year generated the most revenue?`
 ```sql
+WITH annual_revenue AS (
+    SELECT 
+        strftime('%Y', date) AS year,
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
+    FROM Sales
+    GROUP BY strftime('%Y',date)
+    ORDER BY year
+)
 
+SELECT
+    year,
+    MAX(revenue) AS revenue
+FROM annual_revenue
 ```
 `Which month generated the most revenue?'
+```sql
+WITH monthly_revenue AS (
+    SELECT 
+        strftime('%Y-%m', date) AS month,
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
+    FROM Sales
+    GROUP BY strftime('%Y',date), strftime('%m',date)
+    ORDER BY month
+)
 
+SELECT
+    month,
+    MAX(revenue) AS revenue
+FROM monthly_revenue
+```
 `What are the annual sales for each category?`
 ```sql
 SELECT
