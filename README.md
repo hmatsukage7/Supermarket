@@ -125,7 +125,7 @@ FROM Sales
 GROUP BY strftime('%Y',date), strftime('%m',date)
 ORDER BY month
 ```
-`Which year generated the most sales?`
+`Which year had the most sales?`
 ```sql
 WITH annual_sales AS (
     SELECT 
@@ -141,7 +141,7 @@ SELECT
     MAX(sales) AS sales
 FROM annual_sales
 ```
-`Which month generated the most sales?'
+`Which month had the most sales?`
 ```sql
 WITH monthly_sales AS (
     SELECT 
@@ -177,7 +177,7 @@ FROM Sales
 JOIN Items ON Sales.item_code = Items.item_code
 GROUP BY strftime('%Y',date), strftime('%m',date), category_name
 ```
-`Which category of vegetables generated the most sales each year?`
+`Which category of vegetables had the most sales each year?`
 ```sql
 WITH monthly_category_sales AS (
     SELECT 
