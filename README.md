@@ -267,7 +267,7 @@ SELECT
     month,
     category_name,
     MAX(sales) AS sales
-FROM annual_category_sales
+FROM monthly_category_sales
 GROUP BY month
 ORDER BY month
 ```
@@ -287,7 +287,7 @@ SELECT
     month,
     category_name,
     MIN(sales) AS sales
-FROM annual_category_sales
+FROM monthly_category_sales
 GROUP BY month
 ORDER BY month
 ```
