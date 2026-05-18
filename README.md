@@ -228,7 +228,7 @@ SELECT
     category_name,
     MAX(sales) AS sales
 FROM annual_category_sales
-GROUP BY year, category_name
+GROUP BY year
 ORDER BY year
 ```
 `Which category of vegetables had the least sales each year?`
@@ -248,7 +248,7 @@ SELECT
     category_name,
     MIN(sales) AS sales
 FROM annual_category_sales
-GROUP BY year, category_name
+GROUP BY year
 ORDER BY year
 ```
 `Which category of vegetables had the most sales each month?`
@@ -268,7 +268,7 @@ SELECT
     category_name,
     MAX(sales) AS sales
 FROM annual_category_sales
-GROUP BY month, category_name
+GROUP BY month
 ORDER BY month
 ```
 `Which category of vegetables had the least sales each month?`
@@ -288,7 +288,7 @@ SELECT
     category_name,
     MIN(sales) AS sales
 FROM annual_category_sales
-GROUP BY month, category_name
+GROUP BY month
 ORDER BY month
 ```
 ```
