@@ -14,6 +14,7 @@ prices = pd.read_csv('annex2.csv')
 sales = pd.read_csv('annex3.csv')
 ```
 rename the column names in each dataset
+> e.g. 'Item Code' --> 'item_code'
 ```python
 items.rename(columns={'Item Code': 'item_code', 'Item Name': 'item_name', 
                       'Category Code': 'category_code', 'Category Name': 'category_name'}, 
@@ -41,6 +42,9 @@ print(prices.duplicated().any())
 print(sales.duplicated().any())
 ```
 save the modified dataset as a new csv file and rename them for readability
+* 'annex1.csv' --> 'Items.csv'
+* 'annex2.csv' --> 'Price.csv'
+* 'annex3.csv' --> 'Sales.csv'
 ```python
 items.to_csv('Items.csv', index=False)
 prices.to_csv('Prices.csv', index=False)
