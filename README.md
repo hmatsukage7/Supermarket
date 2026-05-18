@@ -118,7 +118,14 @@ FROM Sales
 GROUP BY strftime('%Y',date)
 ORDER BY year
 ```
-`What are the saless of each month?`
+```sql
+-- For BigQuery you can use:
+EXTRACT(YEAR FROM date)
+-- instead of:
+strftime('%Y', date)
+-- which is used in SQLite
+```
+`What are the sales of each month?`
 ```sql
 SELECT 
     strftime('%Y-%m', date) AS month,
@@ -143,6 +150,22 @@ SELECT
     MAX(sales) AS sales
 FROM annual_sales
 ```
+`Which year had the least sales?`
+```sql
+WITH annual_sales AS (
+    SELECT 
+        strftime('%Y', date) AS year,
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
+    FROM Sales
+    GROUP BY strftime('%Y',date)
+    ORDER BY year
+)
+
+SELECT
+    year,
+    MIN(sales) AS sales
+FROM annual_sales
+```
 `Which month had the most sales?`
 ```sql
 WITH monthly_sales AS (
@@ -157,6 +180,22 @@ WITH monthly_sales AS (
 SELECT
     month,
     MAX(sales) AS sales
+FROM monthly_sales
+```
+`Which month had the least sales?`
+```sql
+WITH monthly_sales AS (
+    SELECT 
+        strftime('%Y-%m', date) AS month,
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
+    FROM Sales
+    GROUP BY strftime('%Y',date), strftime('%m',date)
+    ORDER BY month
+)
+
+SELECT
+    month,
+    MIN(sales) AS sales
 FROM monthly_sales
 ```
 `What are the annual sales for each category?`
