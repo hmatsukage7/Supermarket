@@ -111,7 +111,7 @@ FROM Price
 ```sql
 SELECT 
     strftime('%Y', date) AS year,
-    SUM(quantity_sold*unit_selling_price) AS revenue
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
 FROM Sales
 GROUP BY strftime('%Y',date)
 ORDER BY year
@@ -120,7 +120,7 @@ ORDER BY year
 ```sql
 SELECT 
     strftime('%Y-%m', date) AS month,
-    SUM(quantity_sold*unit_selling_price) AS revenue
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
 FROM Sales
 GROUP BY strftime('%Y',date), strftime('%m',date)
 ORDER BY month
