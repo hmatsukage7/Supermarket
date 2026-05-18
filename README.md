@@ -107,25 +107,68 @@ SELECT
   MAX(date) AS latest_purchase
 FROM Price
 ```
-
-`What are the most sold vegetables each month every year?`
+`What are the revenues of each year?`
 ```sql
-WITH monthly_sales AS (
+SELECT 
+    strftime('%Y', date) AS year,
+    SUM(quantity_sold*unit_selling_price) AS revenue
+FROM Sales
+GROUP BY strftime('%Y',date)
+ORDER BY year
+```
+`What are the revenues of each month?`
+```sql
+SELECT 
+    strftime('%Y-%m', date) AS month,
+    SUM(quantity_sold*unit_selling_price) AS revenue
+FROM Sales
+GROUP BY strftime('%Y',date), strftime('%m',date)
+ORDER BY month
+```
+`Which year generated the most revenue?`
+```sql
+
+```
+`Which month generated the most revenue?'
+
+`What are the annual sales for each category?`
+```sql
+SELECT
+    strftime('%Y',date), 
+    category_name, 
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS sale
+FROM Sales
+JOIN Items ON Sales.item_code = Items.item_code
+GROUP BY strftime('%Y',date), category_name
+```
+`What are the monthly sales for each category?`
+```sql
+SELECT
+    strftime('%Y-%m',date), 
+    category_name, 
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS sale
+FROM Sales
+JOIN Items ON Sales.item_code = Items.item_code
+GROUP BY strftime('%Y',date), strftime('%m',date), category_name
+```
+`Which category of vegetables generated the most revenue each year?`
+```sql
+WITH monthly_category_sales AS (
     SELECT 
-        date, 
-        item_name, 
-        SUM(quantity_sold) AS quantity_sold 
+        strftime('%Y-%m', date) AS date, 
+        category_name, 
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
     FROM Sales
     JOIN Items ON Sales.item_code = Items.item_code
-    GROUP BY strftime('%Y', date), strftime('%m', date), item_name
+    GROUP BY strftime('%Y', date), strftime('%m', date), category_name
 )
 
 SELECT 
     date,
-    item_name, 
-    MAX(quantity_sold) 
-FROM monthly_sales
-GROUP BY strftime('%Y', date), strftime('%m', date)
+    category_name,
+    MAX(revenue)
+FROM monthly_category_sales
+GROUP BY strftime('%Y', date), strftime('%m', date), category_name
 ORDER BY date
-```
 
+```
