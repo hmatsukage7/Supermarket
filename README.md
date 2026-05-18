@@ -107,30 +107,30 @@ SELECT
   MAX(date) AS latest_purchase
 FROM Price
 ```
-`What are the revenues of each year?`
+`What are the sales of each year?`
 ```sql
 SELECT 
     strftime('%Y', date) AS year,
-    ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
 FROM Sales
 GROUP BY strftime('%Y',date)
 ORDER BY year
 ```
-`What are the revenues of each month?`
+`What are the saless of each month?`
 ```sql
 SELECT 
     strftime('%Y-%m', date) AS month,
-    ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
 FROM Sales
 GROUP BY strftime('%Y',date), strftime('%m',date)
 ORDER BY month
 ```
-`Which year generated the most revenue?`
+`Which year generated the most sales?`
 ```sql
-WITH annual_revenue AS (
+WITH annual_sales AS (
     SELECT 
         strftime('%Y', date) AS year,
-        ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
     FROM Sales
     GROUP BY strftime('%Y',date)
     ORDER BY year
@@ -138,15 +138,15 @@ WITH annual_revenue AS (
 
 SELECT
     year,
-    MAX(revenue) AS revenue
-FROM annual_revenue
+    MAX(sales) AS sales
+FROM annual_sales
 ```
-`Which month generated the most revenue?'
+`Which month generated the most sales?'
 ```sql
-WITH monthly_revenue AS (
+WITH monthly_sales AS (
     SELECT 
         strftime('%Y-%m', date) AS month,
-        ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
     FROM Sales
     GROUP BY strftime('%Y',date), strftime('%m',date)
     ORDER BY month
@@ -154,15 +154,15 @@ WITH monthly_revenue AS (
 
 SELECT
     month,
-    MAX(revenue) AS revenue
-FROM monthly_revenue
+    MAX(sales) AS sales
+FROM monthly_sales
 ```
 `What are the annual sales for each category?`
 ```sql
 SELECT
     strftime('%Y',date), 
     category_name, 
-    ROUND(SUM(quantity_sold*unit_selling_price),2) AS sale
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
 FROM Sales
 JOIN Items ON Sales.item_code = Items.item_code
 GROUP BY strftime('%Y',date), category_name
@@ -172,18 +172,18 @@ GROUP BY strftime('%Y',date), category_name
 SELECT
     strftime('%Y-%m',date), 
     category_name, 
-    ROUND(SUM(quantity_sold*unit_selling_price),2) AS sale
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
 FROM Sales
 JOIN Items ON Sales.item_code = Items.item_code
 GROUP BY strftime('%Y',date), strftime('%m',date), category_name
 ```
-`Which category of vegetables generated the most revenue each year?`
+`Which category of vegetables generated the most sales each year?`
 ```sql
 WITH monthly_category_sales AS (
     SELECT 
         strftime('%Y-%m', date) AS date, 
         category_name, 
-        ROUND(SUM(quantity_sold*unit_selling_price),2) AS revenue
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
     FROM Sales
     JOIN Items ON Sales.item_code = Items.item_code
     GROUP BY strftime('%Y', date), strftime('%m', date), category_name
@@ -192,7 +192,7 @@ WITH monthly_category_sales AS (
 SELECT 
     date,
     category_name,
-    MAX(revenue)
+    MAX(sales)
 FROM monthly_category_sales
 GROUP BY strftime('%Y', date), strftime('%m', date), category_name
 ORDER BY date
