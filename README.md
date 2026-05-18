@@ -228,7 +228,7 @@ SELECT
     category_name,
     MAX(sales)
 FROM annual_category_sales
-GROUP BY strftime('%Y', date), category_name
+GROUP BY year, category_name
 ORDER BY year
 ```
 `Which category of vegetables had the least sales each year?`
