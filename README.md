@@ -102,13 +102,6 @@ SELECT
   COUNT(DISTINCT category_code) AS total_categories
 FROM Items
 ```
-`What is the earliest purchase and the latest purhcase of the supermarket recorded in the dataset?`
-```sql
-SELECT
-  MIN(date) AS earliest_purchase,
-  MAX(date) AS latest_purchase
-FROM Price
-```
 `What are the sales of each year?`
 ```sql
 SELECT 
@@ -173,7 +166,7 @@ WITH monthly_sales AS (
         strftime('%Y-%m', date) AS month,
         ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
     FROM Sales
-    GROUP BY strftime('%Y',date), strftime('%m',date)
+    GROUP BY strftime('%Y-%m',date)
     ORDER BY month
 )
 
@@ -189,7 +182,7 @@ WITH monthly_sales AS (
         strftime('%Y-%m', date) AS month,
         ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
     FROM Sales
-    GROUP BY strftime('%Y',date), strftime('%m',date)
+    GROUP BY strftime('%Y-%m',date)
     ORDER BY month
 )
 
@@ -201,7 +194,7 @@ FROM monthly_sales
 `What are the annual sales for each category?`
 ```sql
 SELECT
-    strftime('%Y',date), 
+    strftime('%Y',date) as year, 
     category_name, 
     ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
 FROM Sales
@@ -211,31 +204,92 @@ GROUP BY strftime('%Y',date), category_name
 `What are the monthly sales for each category?`
 ```sql
 SELECT
-    strftime('%Y-%m',date), 
+    strftime('%Y-%m',date) AS month, 
     category_name, 
     ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
 FROM Sales
 JOIN Items ON Sales.item_code = Items.item_code
-GROUP BY strftime('%Y',date), strftime('%m',date), category_name
+GROUP BY strftime('%Y-%m',date), category_name
 ```
 `Which category of vegetables had the most sales each year?`
 ```sql
-WITH monthly_category_sales AS (
+WITH annual_category_sales AS (
     SELECT 
-        strftime('%Y-%m', date) AS date, 
+        strftime('%Y', date) AS year, 
         category_name, 
         ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
     FROM Sales
     JOIN Items ON Sales.item_code = Items.item_code
-    GROUP BY strftime('%Y', date), strftime('%m', date), category_name
+    GROUP BY strftime('%Y', date), category_name
 )
 
 SELECT 
-    date,
+    year,
     category_name,
     MAX(sales)
-FROM monthly_category_sales
-GROUP BY strftime('%Y', date), strftime('%m', date), category_name
-ORDER BY date
-
+FROM annual_category_sales
+GROUP BY strftime('%Y', date), category_name
+ORDER BY year
 ```
+`Which category of vegetables had the least sales each year?`
+```sql
+WITH annual_category_sales AS (
+    SELECT 
+        strftime('%Y', date) AS year, 
+        category_name, 
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
+    FROM Sales
+    JOIN Items ON Sales.item_code = Items.item_code
+    GROUP BY strftime('%Y', date), category_name
+)
+
+SELECT 
+    year,
+    category_name,
+    MIN(sales)
+FROM annual_category_sales
+GROUP BY year, category_name
+ORDER BY year
+```
+`Which category of vegetables had the most sales each month?`
+```sql
+WITH monthly_category_sales AS (
+    SELECT 
+        strftime('%Y-%m', date) AS month, 
+        category_name, 
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
+    FROM Sales
+    JOIN Items ON Sales.item_code = Items.item_code
+    GROUP BY strftime('%Y-%m', date), category_name
+)
+
+SELECT 
+    month,
+    category_name,
+    MAX(sales)
+FROM annual_category_sales
+GROUP BY month, category_name
+ORDER BY month
+```
+`Which category of vegetables had the least sales each month?`
+```sql
+WITH monthly_category_sales AS (
+    SELECT 
+        strftime('%Y-%m', date) AS month, 
+        category_name, 
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
+    FROM Sales
+    JOIN Items ON Sales.item_code = Items.item_code
+    GROUP BY strftime('%Y-%m', date), category_name
+)
+
+SELECT 
+    month,
+    category_name,
+    MIN(sales)
+FROM annual_category_sales
+GROUP BY month, category_name
+ORDER BY month
+```
+```
+
