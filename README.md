@@ -291,5 +291,54 @@ FROM monthly_category_sales
 GROUP BY month
 ORDER BY month
 ```
+`What are the total sales of all vegetables?`
+```sql
+SELECT
+    item_name,
+    ROUND(SUM(quantity_sold*unit_selling_price),2) AS average_sales
+FROM Sales
+JOIN Items ON Sales.item_code=Items.item_code
+GROUP BY item_name
 ```
+`Which vegetable had the highest sales?`
+```sql
+WITH total_sales AS (
+    SELECT
+        item_name,
+        SUM(quantity_sold*unit_selling_price) AS sales
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    GROUP BY item_name
+)
 
+SELECT item_name, MAX(sales) AS sales FROM total_sales
+```
+`Which vegetable had the lowest sales?`
+```sql
+WITH total_sales AS (
+    SELECT
+        item_name,
+        SUM(quantity_sold*unit_selling_price) AS sales
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    GROUP BY item_name
+)
+
+SELECT item_name, MIN(sales) AS sales FROM total_sales
+```
+`What are the yearly average sales of each category ?`
+```sql
+
+```
+`What are the monthly average sales of each category ?`
+```sql
+
+```
+`What are the yearly average sales of each vegetable ?`
+```sql
+
+```
+`What are the monthly average sales of each vegetable ?`
+```sql
+
+```
