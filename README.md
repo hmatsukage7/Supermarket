@@ -347,6 +347,54 @@ SELECT
     SUM(profit) AS net_profit 
 FROM price_cost
 ```
+`What are the annual profits?`
+```sql
+WITH price_cost AS (
+    SELECT
+        Sales.date AS date, 
+        item_name, 
+        category_name,
+        quantity_sold, 
+        unit_selling_price, 
+        wholesale_price,
+        quantity_sold*unit_selling_price AS sales,
+        quantity_sold*wholesale_price AS costs,
+        quantity_sold*unit_selling_price-quantity_sold*wholesale_price AS profit
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    LEFT JOIN Prices ON Sales.item_code=Prices.item_code AND Sales.date=Prices.date
+)
+
+SELECT
+    strftime('%Y', date) AS year,
+    ROUND(SUM(profit),2) AS profit
+FROM price_cost
+GROUP BY strftime('%Y', date)
+```
+`What are the monthly profits?`
+```sql
+WITH price_cost AS (
+    SELECT
+        Sales.date AS date, 
+        item_name, 
+        category_name,
+        quantity_sold, 
+        unit_selling_price, 
+        wholesale_price,
+        quantity_sold*unit_selling_price AS sales,
+        quantity_sold*wholesale_price AS costs,
+        quantity_sold*unit_selling_price-quantity_sold*wholesale_price AS profit
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    LEFT JOIN Prices ON Sales.item_code=Prices.item_code AND Sales.date=Prices.date
+)
+
+SELECT
+    strftime('%Y-%m', date) AS month,
+    ROUND(SUM(profit),2) AS profit
+FROM price_cost
+GROUP BY strftime('%Y-%m', date)
+```
 `What are the profits of each vegetable?`
 ```sql
 WITH price_cost AS (
