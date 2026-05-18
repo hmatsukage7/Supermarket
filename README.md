@@ -20,12 +20,12 @@ items.rename(columns={'Item Code': 'item_code', 'Item Name': 'item_name',
                       'Category Code': 'category_code', 'Category Name': 'category_name'}, 
                       inplace=True)
 
-prices.rename(columns={'Date': 'date', 'Time': 'time', 'Item Code': 'item_code', 
+sales.rename(columns={'Date': 'date', 'Time': 'time', 'Item Code': 'item_code', 
                        'Quantity Sold (kilo)': 'quantity_sold', 
                        'Unit Selling Price (RMB/kg)': 'unit_selling_price', 
                        'Sale or Return': 'sale_or_return', 'Discount (Yes/No)': 'discount'}, inplace=True)
 
-sales.rename(columns={'Date': 'date', 'Item Code': 'item_code', 
+prices.rename(columns={'Date': 'date', 'Item Code': 'item_code', 
                       'Wholesale Price (RMB/kg)': 'wholesale_price'}, 
                       inplace=True)
 ```
@@ -43,7 +43,7 @@ print(sales.duplicated().any())
 ```
 save the modified dataset as a new csv file and rename them for readability
 * 'annex1.csv' --> 'Items.csv'
-* 'annex2.csv' --> 'Price.csv'
+* 'annex2.csv' --> 'Prices.csv'
 * 'annex3.csv' --> 'Sales.csv'
 ```python
 items.to_csv('Items.csv', index=False)
@@ -107,16 +107,25 @@ SELECT
   MAX(date) AS latest_purchase
 FROM Price
 ```
-`How many vegetables has the supermarket purchased in total?`
+
+`What are the most sold vegetables each month every year?`
 ```sql
-SELECT
-  COUNT(*) AS total_purchase
-FROM Price
+WITH monthly_sales AS (
+    SELECT 
+        date, 
+        item_name, 
+        SUM(quantity_sold) AS quantity_sold 
+    FROM Sales
+    JOIN Items ON Sales.item_code = Items.item_code
+    GROUP BY strftime('%Y', date), strftime('%m', date), item_name
+)
+
+SELECT 
+    date,
+    item_name, 
+    MAX(quantity_sold) 
+FROM monthly_sales
+GROUP BY strftime('%Y', date), strftime('%m', date)
+ORDER BY date
 ```
-`What is the supermarket's total spendage on vegetables?`
-```sql
-SELECT
-  SUM(wholesale_price) AS total_spendage
-FROM Price
-```
-`
+
