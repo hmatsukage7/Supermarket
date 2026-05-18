@@ -2,7 +2,50 @@
 ## Data Source
 ### Kaggle
 * [Supermarket Sales Data](https://www.kaggle.com/datasets/yapwh1208/supermarket-sales-data?select=annex2.csv)
+## Data Cleaning - Python
+import pandas
+```python
+import pandas as pd
+```
+read the csv files 
+```python
+items = pd.read_csv('annex1.csv')
+prices = pd.read_csv('annex2.csv')
+sales = pd.read_csv('annex3.csv')
+```
+rename the column names in each dataset
+```python
+items.rename(columns={'Item Code': 'item_code', 'Item Name': 'item_name', 
+                      'Category Code': 'category_code', 'Category Name': 'category_name'}, 
+                      inplace=True)
 
+prices.rename(columns={'Date': 'date', 'Time': 'time', 'Item Code': 'item_code', 
+                       'Quantity Sold (kilo)': 'quantity_sold', 
+                       'Unit Selling Price (RMB/kg)': 'unit_selling_price', 
+                       'Sale or Return': 'sale_or_return', 'Discount (Yes/No)': 'discount'}, inplace=True)
+
+sales.rename(columns={'Date': 'date', 'Item Code': 'item_code', 
+                      'Wholesale Price (RMB/kg)': 'wholesale_price'}, 
+                      inplace=True)
+```
+check for any null values in the dataset
+```python
+print(items.isna().any().any())
+print(prices.isna().any().any())
+print(sales.isna().any().any())
+```
+check for any duplicates in the dataset
+```python
+print(items.duplicated().any())
+print(prices.duplicated().any())
+print(sales.duplicated().any())
+```
+save the modified dataset as a new csv file and rename them for readability
+```python
+items.to_csv('Items.csv', index=False)
+prices.to_csv('Prices.csv', index=False)
+sales.to_csv('Sales.csv', index=False)
+```
 ## Data Structure
 ### Tables
 `Items`
