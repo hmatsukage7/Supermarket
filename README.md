@@ -326,19 +326,20 @@ WITH total_sales AS (
 
 SELECT item_name, MIN(sales) AS sales FROM total_sales
 ```
-`What are the yearly average sales of each category ?`
+`What are the average monthly sales each year for each category ?`
 ```sql
 
 ```
-`What are the monthly average sales of each category ?`
+`What are the average monthly sales each year for each vegetable ?`
 ```sql
 
 ```
-`What are the yearly average sales of each vegetable ?`
+`What are the average weekly sales each month for each category ?`
 ```sql
 
 ```
-`What are the monthly average sales of each vegetable ?`
+`What are the average weekly sales each year for each vegetable ?`
 ```sql
 
 ```
+
