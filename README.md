@@ -326,8 +326,132 @@ WITH total_sales AS (
 
 SELECT item_name, MIN(sales) AS sales FROM total_sales
 ```
-`What are the annual profits for each category?`
+`What is the net profit of the supermarket?`
 ```sql
+WITH price_cost AS (
+    SELECT
+        Sales.date, 
+        item_name, 
+        quantity_sold, 
+        unit_selling_price, 
+        wholesale_price,
+        quantity_sold*unit_selling_price AS sales,
+        quantity_sold*wholesale_price AS costs,
+        quantity_sold*unit_selling_price-quantity_sold*wholesale_price AS profit
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    LEFT JOIN Prices ON Sales.item_code=Prices.item_code AND Sales.date=Prices.date
+)
 
+SELECT
+    SUM(profit) AS net_profit 
+FROM price_cost
 ```
-`What are the monthly profits for each category?`
+`What are the profits of each vegetable?`
+```sql
+WITH price_cost AS (
+    SELECT
+        Sales.date, 
+        item_name,
+        category_name,
+        quantity_sold, 
+        unit_selling_price, 
+        wholesale_price,
+        quantity_sold*unit_selling_price AS sales,
+        quantity_sold*wholesale_price AS costs,
+        quantity_sold*unit_selling_price-quantity_sold*wholesale_price AS profit
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    LEFT JOIN Prices ON Sales.item_code=Prices.item_code AND Sales.date=Prices.date
+)
+
+SELECT
+    item_name,
+    SUM(profit) AS profit
+FROM price_cost
+GROUP BY item_name
+```
+`What are the profits of each category?`
+```sql
+WITH price_cost AS (
+    SELECT
+        Sales.date, 
+        item_name, 
+        category_name,
+        quantity_sold, 
+        unit_selling_price, 
+        wholesale_price,
+        quantity_sold*unit_selling_price AS sales,
+        quantity_sold*wholesale_price AS costs,
+        quantity_sold*unit_selling_price-quantity_sold*wholesale_price AS profit
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    LEFT JOIN Prices ON Sales.item_code=Prices.item_code AND Sales.date=Prices.date
+)
+
+SELECT
+    category_name,
+    SUM(profit) AS profit
+FROM price_cost
+GROUP BY category_name
+```
+`How many of vegetables made a profit and how many did not?`
+```sql
+WITH price_cost AS (
+    SELECT
+        Sales.date, 
+        item_name, 
+        category_name,
+        quantity_sold, 
+        unit_selling_price, 
+        wholesale_price,
+        quantity_sold*unit_selling_price AS sales,
+        quantity_sold*wholesale_price AS costs,
+        quantity_sold*unit_selling_price-quantity_sold*wholesale_price AS profit
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    LEFT JOIN Prices ON Sales.item_code=Prices.item_code AND Sales.date=Prices.date
+),
+veg_profit AS (
+    SELECT 
+        item_name,
+        SUM(profit) AS profit
+    FROM price_cost
+    GROUP BY item_name
+)
+
+SELECT 
+    SUM(CASE WHEN profit >= 0 THEN 1 ELSE 0 END) AS count_profit,
+    SUM(CASE WHEN profit < 0 THEN 1 ELSE 0 END) AS count_loss
+FROM veg_profit
+```
+`How many categories made a profit and how many did not?`
+```sql
+WITH price_cost AS (
+    SELECT
+        Sales.date, 
+        item_name, 
+        category_name,
+        quantity_sold, 
+        unit_selling_price, 
+        wholesale_price,
+        quantity_sold*unit_selling_price AS sales,
+        quantity_sold*wholesale_price AS costs,
+        quantity_sold*unit_selling_price-quantity_sold*wholesale_price AS profit
+    FROM Sales
+    JOIN Items ON Sales.item_code=Items.item_code
+    LEFT JOIN Prices ON Sales.item_code=Prices.item_code AND Sales.date=Prices.date
+),
+category_profit AS (
+    SELECT 
+        category_name,
+        SUM(profit) AS profit
+    FROM price_cost
+    GROUP BY category_name
+)
+
+SELECT 
+    SUM(CASE WHEN profit >= 0 THEN 1 ELSE 0 END) AS count_profit,
+    SUM(CASE WHEN profit < 0 THEN 1 ELSE 0 END) AS count_loss
+FROM category_profit
+```
