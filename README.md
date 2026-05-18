@@ -226,7 +226,7 @@ WITH annual_category_sales AS (
 SELECT 
     year,
     category_name,
-    MAX(sales)
+    MAX(sales) AS sales
 FROM annual_category_sales
 GROUP BY year, category_name
 ORDER BY year
@@ -246,7 +246,7 @@ WITH annual_category_sales AS (
 SELECT 
     year,
     category_name,
-    MIN(sales)
+    MIN(sales) AS sales
 FROM annual_category_sales
 GROUP BY year, category_name
 ORDER BY year
@@ -266,7 +266,7 @@ WITH monthly_category_sales AS (
 SELECT 
     month,
     category_name,
-    MAX(sales)
+    MAX(sales) AS sales
 FROM annual_category_sales
 GROUP BY month, category_name
 ORDER BY month
@@ -286,7 +286,7 @@ WITH monthly_category_sales AS (
 SELECT 
     month,
     category_name,
-    MIN(sales)
+    MIN(sales) AS sales
 FROM annual_category_sales
 GROUP BY month, category_name
 ORDER BY month
