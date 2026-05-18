@@ -5,7 +5,7 @@
 
 ## Data Structure
 ### Tables
-`Items`: annex1.csv
+`Items`
 * `item_code` :
   > *unique id of the vegetable*
 * `item_name` :
@@ -15,7 +15,7 @@
 * `category_name` :
   > name of vegetable category
 
-`Price`: annex2.csv
+`Price`
 * `date` :
   > date when the supermarket bought the vegetable
 * `item_code` :
@@ -23,7 +23,7 @@
 * `wholesale_price` :
   > price which supermarket bought the vegetable in RMB
 
-`Sales`: annex3.csv
+`Sales`
 * `date` :
   > date when the customer bought the vegetable from supermarket
 * `time` :
