@@ -52,6 +52,8 @@ items.to_csv('Items.csv', index=False)
 prices.to_csv('Prices.csv', index=False)
 sales.to_csv('Sales.csv', index=False)
 ```
+the `dataset.zip` file contains both the original csv files and the cleaned version
+
 ## Data Structure
 ### Tables
 `Items`
