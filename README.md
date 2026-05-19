@@ -114,11 +114,13 @@ GROUP BY strftime('%Y',date)
 ORDER BY year
 ```
 ```sql
--- For BigQuery you can use:
-EXTRACT(YEAR FROM date)
 -- instead of:
 strftime('%Y', date)
 -- which is used in SQLite
+-- for BigQuery use:
+EXTRACT (YEAR, date)
+-- for MySQL use:
+YEAR(date)
 ```
 `What are the sales of each month?`
 ```sql
