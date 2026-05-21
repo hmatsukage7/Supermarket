@@ -16,18 +16,7 @@ prices = pd.read_csv('annex3.csv')
 rename the column names in each dataset
 > e.g. 'Item Code' --> 'item_code'
 ```python
-items.rename(columns={'Item Code': 'item_code', 'Item Name': 'item_name', 
-                      'Category Code': 'category_code', 'Category Name': 'category_name'}, 
-                      inplace=True)
-
-sales.rename(columns={'Date': 'date', 'Time': 'time', 'Item Code': 'item_code', 
-                       'Quantity Sold (kilo)': 'quantity_sold', 
-                       'Unit Selling Price (RMB/kg)': 'unit_selling_price', 
-                       'Sale or Return': 'sale_or_return', 'Discount (Yes/No)': 'discount'}, inplace=True)
-
-prices.rename(columns={'Date': 'date', 'Item Code': 'item_code', 
-                      'Wholesale Price (RMB/kg)': 'wholesale_price'}, 
-                      inplace=True)
+items.columns = items.columns.str.lower().str.replace(' ','_')
 ```
 check for any null values in the dataset
 ```python
