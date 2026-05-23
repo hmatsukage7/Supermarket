@@ -15,9 +15,17 @@ prices = pd.read_csv('annex3.csv')
 ```
 rename the column names in each dataset
 > e.g. 'Item Code' --> 'item_code'
+
 ```python
 items.columns = items.columns.str.lower().str.replace(' ','_')
+
+sales.columns = sales.columns.str.split('(').str[0]
+sales.columns = sales.columns.str.strip().str.lower().str.replace(' ','_')
+
+prices.columns = prices.columns.str.split('(').str[0]
+prices.columns = prices.columns.str.strip().str.lower().str.replace(' ','_')
 ```
+
 check for any null values in the dataset
 ```python
 print(items.isna().any().any())
@@ -41,7 +49,7 @@ items.to_csv('Items.csv', index=False)
 prices.to_csv('Prices.csv', index=False)
 sales.to_csv('Sales.csv', index=False)
 ```
-the `dataset.zip` file contains both the original csv files and the cleaned version
+the `dataset.zip` file contains the original csv files
 
 ## Data Structure
 ### Tables
