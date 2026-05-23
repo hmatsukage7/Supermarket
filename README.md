@@ -13,10 +13,22 @@ items = pd.read_csv('annex1.csv')
 sales = pd.read_csv('annex2.csv')
 prices = pd.read_csv('annex3.csv')
 ```
+check the datatypes of each table's columns
+```python
+print(items.info())
+print(sales.info())
+print(prices.info())
+```
+
 rename the column names in each dataset
 > e.g. 'Item Code' --> 'item_code'
 
 ```python
+# first check the column names
+print(items.columns.to_list())
+print(prices.columns.to_list())
+print(sales.columns.to_list())
+
 items.columns = items.columns.str.lower().str.replace(' ','_')
 
 sales.columns = sales.columns.str.split('(').str[0]
