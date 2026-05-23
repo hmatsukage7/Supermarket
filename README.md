@@ -19,16 +19,36 @@ print(items.info())
 print(sales.info())
 print(prices.info())
 ```
+`items.info()`
+
+<p align='center'>
+<img src='https://i.imgur.com/fYDfKI1.png', alt="items info">
+
+`sales.info()`
+
+<p align='center'>
+<img src='https://i.imgur.com/iz1418S.png', width=56% alt="sales info">
+
+`prices.info()`
+
+<p align='center'>
+<img src='https://i.imgur.com/bYfWaTS.png', width=56% alt="prices info">
+
 
 rename the column names in each dataset
 > e.g. 'Item Code' --> 'item_code'
 
 ```python
 # first check the column names
-print(items.columns.to_list())
-print(prices.columns.to_list())
-print(sales.columns.to_list())
+print(f"items_colunm_names: {items.columns.to_list()}")
+print(f"saless_colunm_names: {sales.columns.to_list()}")
+print(f"prices_colunm_names: {prices.columns.to_list()}")
+```
+<p align='center'>
+<img src='https://i.imgur.com/jzvhVdx.png', alt="column names">
 
+
+```python
 items.columns = items.columns.str.lower().str.replace(' ','_')
 
 sales.columns = sales.columns.str.split('(').str[0]
@@ -37,6 +57,9 @@ sales.columns = sales.columns.str.strip().str.lower().str.replace(' ','_')
 prices.columns = prices.columns.str.split('(').str[0]
 prices.columns = prices.columns.str.strip().str.lower().str.replace(' ','_')
 ```
+<p align='center'>
+<img src='https://i.imgur.com/VoDhato.png', alt="cleaned_column_names">
+
 
 check for any null values in the dataset
 ```python
