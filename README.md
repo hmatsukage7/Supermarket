@@ -87,12 +87,20 @@ SELECT
   COUNT(*) AS total_veg
 FROM Items
 ```
+| Total Vegetables |
+| :--------------: |
+| 251              |
+
 `How many different categories of vegetables are there?`
 ```sql
 SELECT
   COUNT(DISTINCT category_code) AS total_categories
 FROM Items
 ```
+| Total Categories |
+| :--------------: |
+| 6                |
+
 `What are the sales of each year?`
 ```sql
 SELECT 
@@ -111,6 +119,13 @@ EXTRACT (YEAR, date)
 -- for MySQL use:
 YEAR(date)
 ```
+| Year | Sales |
+| :--: | :---: |
+| 2020 | 669529.27 |
+| 2021 | 1100362.65 |
+| 2022 | 1036772.4 |
+| 2023 | 563102.15 |
+
 `What are the sales of each month?`
 ```sql
 SELECT 
@@ -120,6 +135,7 @@ FROM Sales
 GROUP BY strftime('%Y',date), strftime('%m',date)
 ORDER BY month
 ```
+
 `Which year had the most sales?`
 ```sql
 WITH annual_sales AS (
@@ -136,6 +152,10 @@ SELECT
     MAX(sales) AS sales
 FROM annual_sales
 ```
+| Year | Sales |
+| :--: | :---: |
+| 2021 | 1100362.65 |
+
 `Which year had the least sales?`
 ```sql
 WITH annual_sales AS (
@@ -146,6 +166,10 @@ WITH annual_sales AS (
     GROUP BY strftime('%Y',date)
     ORDER BY year
 )
+
+| Year | Sales |
+| :--: | :---: |
+| 2023 | 563102.15 |
 
 SELECT
     year,
@@ -168,6 +192,10 @@ SELECT
     MAX(sales) AS sales
 FROM monthly_sales
 ```
+| Year | Sales |
+| :--: | :---: |
+| 2021-02 | 178817.9 |
+
 `Which month had the least sales?`
 ```sql
 WITH monthly_sales AS (
@@ -184,6 +212,10 @@ SELECT
     MIN(sales) AS sales
 FROM monthly_sales
 ```
+| Month | Sales |
+| :--: | :---: |
+| 2022-06 | 52933.36 |
+
 `What are the annual sales for each category?`
 ```sql
 SELECT
@@ -194,6 +226,7 @@ FROM Sales
 JOIN Items ON Sales.item_code = Items.item_code
 GROUP BY strftime('%Y',date), category_name
 ```
+
 `What are the monthly sales for each category?`
 ```sql
 SELECT
@@ -204,7 +237,8 @@ FROM Sales
 JOIN Items ON Sales.item_code = Items.item_code
 GROUP BY strftime('%Y-%m',date), category_name
 ```
-`Which category of vegetables had the most sales each year?`
+
+`Which category had the most sales each year?`
 ```sql
 WITH annual_category_sales AS (
     SELECT 
@@ -224,6 +258,13 @@ FROM annual_category_sales
 GROUP BY year
 ORDER BY year
 ```
+| Year | Category | Sales |
+| :--: | :------: | :---: |
+| 2020 | Flower/LeafÂ Vegetables | 234438.6 |
+| 2021 | Flower/LeafÂ Vegetables | 364896.96 |
+| 2022 | Flower/LeafÂ Vegetables | 308505.47 |
+| 2023 | Flower/LeafÂ Vegetables | 171228.76 |
+
 `Which category of vegetables had the least sales each year?`
 ```sql
 WITH annual_category_sales AS (
@@ -244,6 +285,13 @@ FROM annual_category_sales
 GROUP BY year
 ORDER BY year
 ```
+| Year | Category | Sales |
+| :--: | :------: | :---: |
+| 2020 | Solanum | 34601.35 |
+| 2021 | Solanum | 63201.07 |
+| 2022 | Solanum | 58942.91 |
+| 2023 | Solanum | 34378.93 |
+
 `Which category of vegetables had the most sales each month?`
 ```sql
 WITH monthly_category_sales AS (
@@ -284,7 +332,7 @@ FROM monthly_category_sales
 GROUP BY month
 ORDER BY month
 ```
-`What are the total sales of all vegetables?`
+`What are the total sales for all vegetables?`
 ```sql
 SELECT
     item_name,
@@ -293,12 +341,13 @@ FROM Sales
 JOIN Items ON Sales.item_code=Items.item_code
 GROUP BY item_name
 ```
+
 `Which vegetable had the highest sales?`
 ```sql
 WITH total_sales AS (
     SELECT
         item_name,
-        SUM(quantity_sold*unit_selling_price) AS sales
+        ROUND(SUM(quantity_sold*unit_selling_price),2) AS sales
     FROM Sales
     JOIN Items ON Sales.item_code=Items.item_code
     GROUP BY item_name
@@ -306,6 +355,10 @@ WITH total_sales AS (
 
 SELECT item_name, MAX(sales) AS sales FROM total_sales
 ```
+| Vegetable | Sales |
+| :-------: | :---: |
+| Broccoli | 269880.96 |
+
 `Which vegetable had the lowest sales?`
 ```sql
 WITH total_sales AS (
@@ -319,6 +372,10 @@ WITH total_sales AS (
 
 SELECT item_name, MIN(sales) AS sales FROM total_sales
 ```
+| Vegetable | Sales |
+| :-------: | :---: |
+| Needle Mushroom (Bag) | 3.5 |
+
 `What is the net profit of the supermarket?`
 ```sql
 WITH price_cost AS (
@@ -337,9 +394,13 @@ WITH price_cost AS (
 )
 
 SELECT
-    SUM(profit) AS net_profit 
+    ROUND(SUM(profit),2) AS net_profit 
 FROM price_cost
 ```
+| Net Profit |
+| :--------: |
+| 1243652.28 |
+
 `What are the annual profits?`
 ```sql
 WITH price_cost AS (
@@ -364,6 +425,13 @@ SELECT
 FROM price_cost
 GROUP BY strftime('%Y', date)
 ```
+| Year | Profit |
+| :--: | :----: |
+| 2020 | 248392.67 |
+| 2021 | 389863.53 |
+| 2022 | 398194.89 |
+| 2023 | 207201.2 |
+
 `What are the monthly profits?`
 ```sql
 WITH price_cost AS (
@@ -426,6 +494,10 @@ SELECT
     MAX(profit) AS profit
 FROM annual_profit
 ```
+| Year | Profit |
+| :--: | :----: |
+| 2022 |398194.89 |
+
 `Which month did the supermarket make the most profit?`
 ```sql
 WITH price_cost AS (
